@@ -1,0 +1,17 @@
+   # pip install -r requirements.txt
+    
+streamlit
+pandas
+matplotlib
+numpy
+openai
+langchain
+langchain-core
+langchain-community
+langchain-experimental
+langchain-openai
+python-dotenv
+pypdf
+pypdf2
+faiss-cpu
+sentence-transformers
