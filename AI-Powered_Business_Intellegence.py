@@ -10,6 +10,8 @@ from langchain_openai import OpenAI
 from langchain_community.document_loaders import PyPDFLoader
 from langchain.chains import LLMChain, SequentialChain
 from langchain_core.prompts import PromptTemplate
+from config import OPENAI_API_KEY
+from config import HF_Key
 
 
 # Suppress LangChain deprecation warnings
@@ -41,8 +43,8 @@ class SimpleMemory:
 
 def main():
   # Set your OpenAI API key as an environment variable
-  os.environ['OPENAI_API_KEY'] = 'XXXX'
-  os.environ["HF_TOKEN"] = "XXXXX"
+  openai.api_key = OPENAI_API_KEY
+  hf_api_key = HF_Key
 
 # Part 1: AI-Powered Business Intelligence Assistant
 from google.colab import drive
@@ -50,7 +52,7 @@ drive.mount('/content/drive')
 
 # Step 1: Data Preparation
 def load_data():
-  file_path = '/content/drive/MyDrive/sales_data_capstone.csv'
+  file_path = '/workspaces/Capstone/sales_data_capstone v2.csv'
   data = pd.read_csv(file_path)
   data['Date'] = pd.to_datetime(data['Date'])
   return data
@@ -490,7 +492,7 @@ for entry in memory.retrieve_memory():
 
 #Part 2 and 3
 # Define the language model
-llm = OpenAI(api_key='XXX')
+llm = OpenAI(openai.api_key=OPENAI_API_KEY)
 
 template = '''
 You are an expert AI sales analyst
