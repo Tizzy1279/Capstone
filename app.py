@@ -1,6 +1,12 @@
+import sys
+import os
 import streamlit as st
 import matplotlib.pyplot as plt
-from AI_Powered_Business_Intelligence import (
+
+# Add the directory containing Business_Intelligence.py to the Python path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from Business_Intelligence import (
     load_data,
     show_monthly_sales,
     show_product_sales,
