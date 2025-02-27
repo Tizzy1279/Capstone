@@ -48,7 +48,7 @@ def main():
 
 # Step 1: Data Preparation
 def load_data():
-  file_path = '/workspaces/Capstone/sales_data_capstone v2.csv'
+  file_path = '/workspaces/Capstone/sales_data_capstone.csv'
   data = pd.read_csv(file_path)
   data['Date'] = pd.to_datetime(data['Date'])
   return data
@@ -65,10 +65,6 @@ print(data.head())
 
 print("\nStatistical summary of numerical columns:")
 print(data.describe())  # Provides a statistical summary of numerical columns
-
-# Read the CSV file
-data = pd.read_csv(/workspaces/Capstone/sales_data_capstone v2.csv)
-data['Date'] = pd.to_datetime(data['Date'])
 
 # Function to interpret and execute questions dynamically
 def interpret_question(question, df, memory, summary_stats): #added df
@@ -488,7 +484,7 @@ for entry in memory.retrieve_memory():
 
 #Part 2 and 3
 # Define the language model
-llm = OpenAI(openai.api_key=OPENAI_API_KEY)
+llm = OpenAI(api_key=OPENAI_API_KEY)
 
 template = '''
 You are an expert AI sales analyst
