@@ -10,8 +10,6 @@ from langchain_openai import OpenAI
 from langchain_community.document_loaders import PyPDFLoader
 from langchain.chains import LLMChain, SequentialChain
 from langchain_core.prompts import PromptTemplate
-from config import OPENAI_API_KEY
-from config import HF_Key
 import streamlit as st
 
 # Load Data

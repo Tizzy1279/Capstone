@@ -13,7 +13,7 @@ api_key = os.getenv('OPENAI_API_KEY')
 
 
 # Initialize the language model
-llm = OpenAI(api_key=OPENAI_API_KEY)
+llm = OpenAI(api_key=api_key)
 
 # Define the template for the LLM to generate answers
 answer_template = """
