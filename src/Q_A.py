@@ -3,11 +3,19 @@ import os
 import pandas as pd
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
+from langchain_community.llms import OpenAI
+import sys
+
+# Add the root directory to the Python path
+sys.path.append('/workspaces/Capstone')
+
 from config import OPENAI_API_KEY
 
 # Set the API key
 openai.api_key = OPENAI_API_KEY
 
+# Initialize the language model
+llm = OpenAI(api_key=OPENAI_API_KEY)
 
 # Define the template for the LLM to generate answers
 answer_template = """
