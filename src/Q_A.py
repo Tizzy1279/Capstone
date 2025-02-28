@@ -3,7 +3,7 @@ import os
 import pandas as pd
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
-from langchain_community.llms import OpenAI
+from langchain_openai import OpenAI
 import sys
 
 # Add the root directory to the Python path
@@ -42,7 +42,7 @@ evaluation_prompt = PromptTemplate(input_variables=["query", "answer", "data_sum
 answer_chain = LLMChain(prompt=answer_prompt, llm=llm)
 evaluation_chain = LLMChain(prompt=evaluation_prompt, llm=llm)
 
-# Function to load and summarize data
+# Function to load and summarize data from the CSV file
 def load_and_summarize_data(file_path):
     data = pd.read_csv(file_path)
 
@@ -87,15 +87,7 @@ def main():
         # Generate prediction using the LLM
         input_pair = {
             "question": user_question,
-            "data_summary": (
-                f"Data Description:\n{data_summary['data_description']}\n\n"
-                f"Region Sales Summary:\n{data_summary['region_sales_summary']}\n\n"
-                f"Product Sales Summary:\n{data_summary['product_sales_summary']}\n\n"
-                f"Age Summary:\n{data_summary['age_summary']}\n\n"
-                f"Gender Sales Summary:\n{data_summary['gender_sales_summary']}\n\n"
-                f"Customer Satisfaction Summary:\n{data_summary['satisfaction_summary']}\n\n"
-                f"Year Sales Summary:\n{data_summary['year_sales_summary']}"
-            )
+            "data_summary": data_summary
         }
         predicted_response = answer_chain(input_pair)
         predicted_answer = predicted_response['text'].strip()
@@ -104,15 +96,7 @@ def main():
         evaluation_input = {
             "query": user_question,
             "answer": predicted_answer,
-            "data_summary": (
-                f"Data Description:\n{data_summary['data_description']}\n\n"
-                f"Region Sales Summary:\n{data_summary['region_sales_summary']}\n\n"
-                f"Product Sales Summary:\n{data_summary['product_sales_summary']}\n\n"
-                f"Age Summary:\n{data_summary['age_summary']}\n\n"
-                f"Gender Sales Summary:\n{data_summary['gender_sales_summary']}\n\n"
-                f"Customer Satisfaction Summary:\n{data_summary['satisfaction_summary']}\n\n"
-                f"Year Sales Summary:\n{data_summary['year_sales_summary']}"
-            )
+            "data_summary": data_summary
         }
         evaluation_result = evaluation_chain(evaluation_input)
 
@@ -120,7 +104,6 @@ def main():
         print(f"Question: {user_question}")
         print(f"Predicted Answer: {predicted_answer}")
         print(f"Evaluation: {evaluation_result['text'].strip()}\n")
-        #print(f"Highest Sales Year: {data_summary['highest_sales_year']}")
 
 if __name__ == "__main__":
-  main()
+    main()

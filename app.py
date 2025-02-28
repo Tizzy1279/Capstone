@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import os
 from src.Business_Intelligence import (
     show_monthly_sales,
     show_product_sales,
@@ -15,83 +16,91 @@ from src.Business_Intelligence import (
     show_satisfaction_correlation,
     show_age_distribution
 )
+from src.Q_A import answer_chain, evaluation_chain, load_and_summarize_data
 
-# Load Data
-@st.cache
-def load_data():
-    file_path = '/workspaces/Capstone/sales_data_capstone.csv'
-    data = pd.read_csv(file_path)
-    data['Date'] = pd.to_datetime(data['Date'])
-    return data
+# Path to the CSV file
+file_path = '/workspaces/Capstone/sales_data_capstone.csv'
 
-data = load_data()
+# Load and summarize the data
+data_summary = load_and_summarize_data(file_path)
 
-# Streamlit App
-st.title("Business Intelligence Dashboard")
+def main():
+    st.title("Interactive Business Intelligence and Q&A App")
 
-menu_options = [
-    "Sales Performance",
-    "Product Analysis",
-    "Regional Analysis",
-    "Demographics"
-]
+    st.sidebar.title("Navigation")
+    options = ["Business Intelligence", "Q&A"]
+    choice = st.sidebar.radio("Go to", options)
 
-choice = st.sidebar.selectbox("Choose Analysis Category", menu_options)
+    if choice == "Business Intelligence":
+        st.header("Business Intelligence")
+        analysis_options = [
+            "Monthly Sales",
+            "Product Sales",
+            "Product Customer Age",
+            "Product Satisfaction",
+            "Regional Sales",
+            "Regional Customer Age",
+            "Regional Satisfaction",
+            "Gender Analysis",
+            "Age Analysis",
+            "Regional Demographics",
+            "Regional Age Analysis",
+            "Satisfaction Correlation",
+            "Age Distribution"
+        ]
+        analysis_choice = st.selectbox("Choose Analysis", analysis_options)
 
-if choice == "Sales Performance":
-    st.header("Sales Performance")
-    show_monthly_sales()
+        if analysis_choice == "Monthly Sales":
+            show_monthly_sales()
+        elif analysis_choice == "Product Sales":
+            show_product_sales()
+        elif analysis_choice == "Product Customer Age":
+            show_product_customer_age()
+        elif analysis_choice == "Product Satisfaction":
+            show_product_satisfaction()
+        elif analysis_choice == "Regional Sales":
+            show_regional_sales()
+        elif analysis_choice == "Regional Customer Age":
+            show_regional_customer_age()
+        elif analysis_choice == "Regional Satisfaction":
+            show_regional_satisfaction()
+        elif analysis_choice == "Gender Analysis":
+            show_gender_analysis()
+        elif analysis_choice == "Age Analysis":
+            show_age_analysis()
+        elif analysis_choice == "Regional Demographics":
+            show_regional_demographics()
+        elif analysis_choice == "Regional Age Analysis":
+            show_regional_age_analysis()
+        elif analysis_choice == "Satisfaction Correlation":
+            show_satisfaction_correlation()
+        elif analysis_choice == "Age Distribution":
+            show_age_distribution()
 
-elif choice == "Product Analysis":
-    st.header("Product Analysis")
-    product_options = [
-        "Show me product sales",
-        "Show me product customer age",
-        "Show me product satisfaction"
-    ]
-    product_choice = st.selectbox("Choose Product Analysis", product_options)
-    if product_choice == "Show me product sales":
-        show_product_sales()
-    elif product_choice == "Show me product customer age":
-        show_product_customer_age()
-    elif product_choice == "Show me product satisfaction":
-        show_product_satisfaction()
+    elif choice == "Q&A":
+        st.header("Q&A")
+        user_question = st.text_input("Please enter your question:")
+        if user_question:
+            input_pair = {
+                "question": user_question,
+                "data_summary": data_summary
+            }
+            predicted_response = answer_chain(input_pair)
+            predicted_answer = predicted_response['text'].strip()
 
-elif choice == "Regional Analysis":
-    st.header("Regional Analysis")
-    regional_options = [
-        "Show me regional sales",
-        "Show me regional customer age",
-        "Show me regional satisfaction"
-    ]
-    regional_choice = st.selectbox("Choose Regional Analysis", regional_options)
-    if regional_choice == "Show me regional sales":
-        show_regional_sales()
-    elif regional_choice == "Show me regional customer age":
-        show_regional_customer_age()
-    elif regional_choice == "Show me regional satisfaction":
-        show_regional_satisfaction()
+            evaluation_input = {
+                "query": user_question,
+                "answer": predicted_answer,
+                "data_summary": data_summary
+            }
+            evaluation_result = evaluation_chain(evaluation_input)
 
-elif choice == "Demographics":
-    st.header("Demographics")
-    demographics_options = [
-        "Show me gender analysis",
-        "Show me age analysis",
-        "Show me regional demographics",
-        "Show me regional age analysis",
-        "Show me satisfaction correlation",
-        "Show me age distribution"
-    ]
-    demographics_choice = st.selectbox("Choose Demographics Analysis", demographics_options)
-    if demographics_choice == "Show me gender analysis":
-        show_gender_analysis()
-    elif demographics_choice == "Show me age analysis":
-        show_age_analysis()
-    elif demographics_choice == "Show me regional demographics":
-        show_regional_demographics()
-    elif demographics_choice == "Show me regional age analysis":
-        show_regional_age_analysis()
-    elif demographics_choice == "Show me satisfaction correlation":
-        show_satisfaction_correlation()
-    elif demographics_choice == "Show me age distribution":
-        show_age_distribution()
+            st.write(f"Question: {user_question}")
+            st.write(f"Predicted Answer: {predicted_answer}")
+            st.write(f"Evaluation: {evaluation_result['text'].strip()}")
+
+if __name__ == "__main__":
+    main()
+
+#streamlit run /workspaces/Capstone/app.py
+#./run_streamlit.sh
