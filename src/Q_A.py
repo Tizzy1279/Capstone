@@ -5,14 +5,12 @@ from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
 from langchain_openai import OpenAI
 import sys
+from dotenv import load_dotenv
+import os
 
-# Add the root directory to the Python path
-sys.path.append('/workspaces/Capstone')
+load_dotenv()
+api_key = os.getenv('OPENAI_API_KEY')
 
-from config import OPENAI_API_KEY
-
-# Set the API key
-openai.api_key = OPENAI_API_KEY
 
 # Initialize the language model
 llm = OpenAI(api_key=OPENAI_API_KEY)
